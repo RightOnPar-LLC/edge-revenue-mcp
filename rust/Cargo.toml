@@ -4,7 +4,7 @@ version = "0.1.0-dev"
 edition = "2021"
 license = "MIT"
 description = "Offline-first edge payments MCP — record sales into a local append-only ledger and sync them to Square via an outbox when connectivity returns. Runs on a Raspberry Pi at the venue."
-repository = "https://github.com/think-zone/edge-revenue-mcp"
+repository = "https://github.com/RightOnPar-LLC/edge-revenue-mcp"
 
 [[bin]]
 name = "edge-revenue-mcp"

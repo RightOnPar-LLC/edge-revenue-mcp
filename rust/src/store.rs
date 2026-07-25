@@ -376,7 +376,7 @@ impl Store {
 
 /// Push a single transaction to Square and return its Square payment id.
 ///
-/// TODO(brother): wire the real Square Payments API here. Replace the stub body
+/// TODO: wire the real Square Payments API here. Replace the stub body
 /// with an HTTPS POST to `https://connect.squareup.com/v2/payments` carrying:
 ///   - header `Authorization: Bearer {token}`
 ///   - header `Square-Version: 2024-xx-xx`
