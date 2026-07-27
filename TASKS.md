@@ -1,7 +1,19 @@
 # Good first issues
 
 Scoped tasks a new collaborator can pick up. The outbox state machine in
-`rust/src/store.rs` is done and tested — these build on it.
+`rust/src/store.rs` is implemented — **it is not yet covered by tests** (see
+task 0). Read the code before building on it.
+
+## 0. Cover the core outbox/ledger logic with tests
+There are currently zero `#[test]`s in this crate. Add unit tests for
+`rust/src/store.rs` covering at minimum: `sale_record` writes an unsynced row
+and is safe with no network; the outbox correctly selects only `synced = 0`
+rows; and the ledger is genuinely append-only (no existing row is ever mutated
+by a subsequent call). This is the foundation every other task below builds on
+— do this one first if you want the highest-confidence starting point.
+**Acceptance:** `cargo test` in `rust/` runs a non-zero number of tests, all
+green; CI (`.github/workflows/ci.yml`) goes from "0 tests ran" to actually
+verifying something.
 
 ## 1. Wire the real Square Payments API in `push_to_square`
 Replace the stub body of `push_to_square` (`rust/src/store.rs`) with a real

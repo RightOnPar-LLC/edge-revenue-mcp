@@ -1,0 +1,42 @@
+# This repo had NO CI at all before this file — the CodeQL run visible in the
+# Actions tab is GitHub's automatic default code scanning, not anything wired
+# here, and it never runs `cargo build` or `cargo test`. TASKS.md invites
+# outside contributors ("good first issues") with nothing gating their PRs.
+#
+# This workflow does NOT claim to verify correctness — there are currently zero
+# `#[test]`s in this crate (verified 2026-07-27; grep for #[test] returns 0
+# across src/). `cargo test` passing here means "0 tests ran and nothing
+# failed", not "the ledger/outbox logic is correct". Real coverage of the
+# outbox state machine — especially the idempotency-on-retry concern TASKS.md
+# item #2 calls out — is a separate, larger piece of work.
+#
+# What this DOES catch, honestly: a PR that fails to compile, or that breaks
+# once real tests are added later. That is a genuine floor, not a fabricated one.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: rust
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: rust
+
+      - name: cargo build (locked)
+        run: cargo build --locked --all-targets
+
+      - name: cargo test (0 tests today — see note above; this catches build breaks, not correctness)
+        run: cargo test --locked
