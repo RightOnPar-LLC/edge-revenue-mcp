@@ -11,7 +11,7 @@ No external database, no server — one local libsql file. Money is integer cent
 | File | What |
 |------|------|
 | `src/main.rs` | rmcp stdio server; the six MCP tools. |
-| `src/store.rs` | The ledger + outbox state machine, and `push_to_square` (stubbed). Holds the unit tests. |
+| `src/store.rs` | The ledger + outbox state machine, and `push_to_square` (stubbed). Unit tests land here (see TASKS.md task 0). |
 | `src/error.rs` | Crate error type. |
 | `src/lib.rs` | Library root; re-exports `Store`, `Transaction`, `Tally`, `ReconcileReport`. |
 
