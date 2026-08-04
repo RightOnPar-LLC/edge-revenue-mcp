@@ -18,6 +18,10 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    # weekly freshness run so the README badge means "still compiles TODAY",
+    # not "compiled whenever someone last pushed" — toolchain rot shows up here
+    - cron: "23 9 * * 1"
 
 permissions:
   contents: read
