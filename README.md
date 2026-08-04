@@ -64,7 +64,7 @@ on a timer (or whenever the agent detects the network is back).
 The Square network call lives in **one clearly-marked function**,
 `push_to_square(...)` in [`rust/src/store.rs`](rust/src/store.rs). Today it
 returns a deterministic fake id (`sq_<receipt_id>`) so the **outbox state
-machine** — the real, correct, tested logic — is fully exercised.
+machine** — the real logic — is fully exercised (test coverage is TASKS.md task 0).
 
 **TODO (see `TASKS.md`):** wire the real Square Payments API
 (`POST https://connect.squareup.com/v2/payments`) inside `push_to_square`, using
