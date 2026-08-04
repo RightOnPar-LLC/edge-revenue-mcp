@@ -1,5 +1,7 @@
 # edge-revenue-mcp
 
+[![ci](https://github.com/RightOnPar-LLC/edge-revenue-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/RightOnPar-LLC/edge-revenue-mcp/actions/workflows/ci.yml)
+
 Offline-first edge payments, exposed over the **Model Context Protocol**.
 
 Built to run on a **Raspberry Pi at a venue** where the network is flaky or
