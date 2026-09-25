@@ -1,60 +1,55 @@
+# AGENTS.md
 
+Guidance for AI coding agents (Claude Code, Cursor, Copilot, Codex, and others)
+working in this repository.
 
-<!-- ESTATE-DOOR:BEGIN — managed by the governance engine (governance-sync). Do not hand-edit; edit the master laws file and re-run sync. -->
-# Editor-agent door — edge-revenue-mcp
+## What this repo is
 
-> Machine-generated operating contract for any editor agent (Cursor, VS Code Copilot, Codex, Claude Code, or any tool that reads `AGENTS.md` / `.github/copilot-instructions.md`). Door fingerprint `bec72b763e68afe3`. Source of truth: `E:\projects\_hq\LAWS.md`.
+`edge-revenue-mcp` is an offline-first payments ledger exposed as a Model Context
+Protocol (MCP) server over stdio, written in Rust. It is designed to run on a
+small device (for example a Raspberry Pi) at a venue with unreliable network:
+sales are recorded to a local append-only libsql ledger and synced to Square
+through an outbox when connectivity returns. See `README.md` for the tool list
+and environment variables.
 
-You have opened this repository. Most editor agents read their rules ONLY from this file and never walk up to the estate's machine-global laws — so the operating contract you need is written here in full. Read it before you act.
+Layout:
 
-## 1 · This repo's identity
-This repo belongs to **RightOnPar-LLC (mainstream / B2B)**.
-- Canonical home: `E:\projects\edge-revenue-mcp`
-- GitHub remote: `RightOnPar-LLC/edge-revenue-mcp` · org `RightOnPar-LLC`
-- One canonical copy per project. If you are not at the canonical home above, you are in a stray copy — stop and flag it (route via hq), do not work here.
+- `rust/` - the crate (`Cargo.toml`, `src/`).
+- `rust/src/store.rs` - the ledger and outbox logic, including the
+  `push_to_square` stub.
+- `TASKS.md` - scoped good-first-issue tasks.
+- `.github/workflows/ci.yml` - CI (build + test).
 
-## 2 · The two-system estate
-This machine runs a two-system estate with a hard separation. Route every unit of work to its own system:
-- **RightOnPar-LLC** — the mainstream / B2B system (GitHub org `RightOnPar-LLC`; also its think-zone / drydockwetdock secure-forked lane and the MeshTool lane). Home under `E:\projects\`.
-- **thesteelezone / steele-os** — the ADULT vertical, RING-FENCED (repo family under `thesteelezone` / `the-steele-zone`).
-Adult work lives in the steele system ONLY and never flows into a RightOnPar-LLC repo.
+## Build and test
 
-## 3 · The ring-fence
-This is a **mainstream (non-adult)** repo. The estate contains a ring-fenced ADULT vertical (steele-os / thesteelezone) kept strictly separate. From here that means: never pull adult content, assets, or data into this repo; never reference or mirror steele material; keep this repo SFW. Adult work belongs in the steele system, never here.
+```sh
+cd rust
+cargo build --locked --all-targets
+cargo test --locked
+```
 
-## 4 · The four hard floors (never automatic — a human signs)
-Everything else: default to action. These four are the only things you never do on your own:
-1. **Money-out** — spending, transfers, trades, moving funds or assets.
-2. **Outward publish / send** — posting, publishing, or sending anything to the outside world on the owner's behalf.
-3. **Credential / ACL changes to people** — granting or changing another person's access, secrets, or permissions.
-4. **Irreversible deletes** — hard-deleting data, history, or resources.
+CI runs the same two commands. Note: test coverage is currently thin (see
+`TASKS.md` task 0); a green `cargo test` today mostly means the crate compiles.
 
-## 5 · Secrets & the vault
-Secrets live ONLY in `C:\Users\vipth\.vault\secrets.env`. Never hardcode a secret, never commit one, never write a plaintext copy into this repo. If a key is missing, self-heal from the vault — do not invent one and do not stop to ask. Nothing secret belongs in a tracked file.
+## Conventions
 
-## 6 · Before you build
-- **Claim before you build** — claim the work on the hq claim board so two agents don't collide.
-- **Everything lands** — finish to destination (merged + deployed + verified) or log the loose end in the OWNING system's `OPEN-LOOPS.md` with a next step.
-- **Route before create** — a new folder/repo/app goes through hq `idea_route` first; nothing new on `C:`.
+- Money is integer cents (`i64`) end to end. Never use floats for amounts.
+- The ledger is append-only. Do not mutate or delete existing rows; corrections
+  are new compensating rows.
+- Sync must be safe to retry. A failed push leaves the row unsynced; use the
+  `receipt_id` as the idempotency key when calling Square.
+- With `SQUARE_ACCESS_TOKEN` unset, sync is a no-op that reports queue depth and
+  never errors. Keep that behavior.
+- stdout is the JSON-RPC channel. Log to stderr only (via `tracing`).
+- When you fix a bug or add a feature, add a test for it.
+- Keep docs accurate; do not describe something as tested or done unless it is.
 
-<!-- ESTATE-LAWS:BEGIN — managed by the governance engine (governance-sync). Do not hand-edit; edit the master laws file and re-run sync. -->
-> **THE LAWS** (source of truth: `E:\projects\_hq\LAWS.md`). This block is machine-synced — fingerprint `213e8bdc04940be3`.
->
-> **LAW 1 — The prime directive** (DW, 2026-07-15)
-> **LAW 2 — One brain, shared thoughts** (DW, 2026-07-15)
-> **LAW 3 — Build, borrow, or blend** (DW, 2026-07-15)
-> **LAW 4 — Orient continuously, not just at the start** (DW, 2026-07-20)
-> **LAW 5 — Keep brain and git lined up** (DW, 2026-07-20)
-> **LAW 6 — The pre-flight, every single input** (DW, 2026-07-20)
-> **LAW 7 — No signature rots** (DW, 2026-07-25)
-> **LAW 8 — Proof over promises** (DW, 2026-08-05)
-> **LAW 9 — Browse in the cloud; local hands only when they must be yours** (DW, 2026-08-20)
-> **LAW 10 — Adult never lands in mainstream; adult stays local** (DW, 2026-08-23)
-> **LAW 11 — The velvet rope** (DW, 2026-09-05)
->
-> Full text + rationale for each law is in the master (`E:\projects\_hq\LAWS.md`). If this block and the master disagree, the master wins and this surface is drifting — re-run the governance sync.
-<!-- ESTATE-LAWS:END -->
+## Secrets
 
-## About this file
-Machine-generated by the estate governance engine (editor-doors surface class). The master is `E:\projects\_hq\LAWS.md`. To change the laws or this door, edit the master (or the door template) and run `npm run govern:sync` from `E:\projects\_hq` — do NOT hand-edit between the `ESTATE-DOOR` markers; any content OUTSIDE the markers is yours to keep.
-<!-- ESTATE-DOOR:END -->
+- Never commit secrets, API tokens (including `SQUARE_ACCESS_TOKEN`), or
+  credentials. Read them from environment variables only.
+- Do not commit ledger database files or local machine paths.
+
+## Contact
+
+support@meshtool.ai
