@@ -1,5 +1,8 @@
 # edge-revenue-mcp
 
+> **The till — offline-first venue payments that settle when the network returns.**  
+> ![theme](https://img.shields.io/badge/ember%20orange-F97316?style=flat-square)
+
 [![ci](https://github.com/RightOnPar-LLC/edge-revenue-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/RightOnPar-LLC/edge-revenue-mcp/actions/workflows/ci.yml)
 
 Offline-first edge payments, exposed over the **Model Context Protocol**.
